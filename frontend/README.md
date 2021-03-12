@@ -1,4 +1,4 @@
-# milid-frontend
+# CMS-frontend
 
 ## Project setup
 ```
