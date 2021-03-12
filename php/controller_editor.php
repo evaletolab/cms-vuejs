@@ -27,9 +27,10 @@
   }
 
   //
-  // GET /editor/slug?published
+  // GET /editor/slug?published=true&lang=fr
   function controller_editor_get($db,$slug,$query) {
     $published = $query["published"];
+    $lang = $query["lang"];
 
     // echo "----pub :" . $published ;
     // echo "----slug:" . $slug;
@@ -40,8 +41,8 @@
     // published: boolean;
     // slug: string;
     $statement = $db->prepare("SELECT content,version,time,published FROM editors WHERE slug=:slug AND published=:published ORDER BY time DESC LIMIT 1;");
-    $statement->bindValue(':slug', $slug);
-    $statement->bindValue(':published', $published);
+    $statement->bindValue(":published", $published);
+    $statement->bindValue(":slug",$slug);
 
     if(!$statement){
         echo "statement failed\n";
@@ -77,7 +78,7 @@
     }
 
     $time = date("Y-m-d H:i:s");
-    $statement = $db->prepare("INSERT INTO editors (slug, content,version, published, time) VALUES (:slug, :content,:version, :timestamp, :published)");
+    $statement = $db->prepare("INSERT INTO editors (slug, content,version, published,lang, time) VALUES (:slug, :content,:version, :published,:lang, :timestamp)");
     if(!$statement){
         echo "statement failed\n";
         echo $statement;
@@ -86,6 +87,7 @@
     $statement->bindValue(':slug', $payload->slug);
     $statement->bindValue(':content', json_encode($payload->content));
     $statement->bindValue(':version', $payload->version);
+    $statement->bindValue(':lang', $payload->lang);
     $statement->bindValue(':published', $payload->published);
     $statement->bindValue(':time', $payload->time);
     
@@ -112,7 +114,7 @@
     }
 
     $time = date("Y-m-d H:i:s");
-    $statement = $db->prepare("UPDATE EDITOR SET content=:content,version=:version,published=:published,time=:time WHERE slug = :slug");
+    $statement = $db->prepare("UPDATE EDITOR SET content=:content,version=:version,published=:published,time=:time WHERE slug = :slug AND lang = :lang");
     if(!$statement){
         echo "statement failed\n";
         echo $statement;
@@ -122,6 +124,7 @@
     $statement->bindValue(':content', json_encode($payload->content));
     $statement->bindValue(':version', $payload->version);
     $statement->bindValue(':published', $payload->published);
+    $statement->bindValue(':lang', $payload->lang);
     $statement->bindValue(':time', $payload->time);
     
     $res = $statement->execute();

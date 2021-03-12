@@ -4,7 +4,7 @@ const github = process.env.NODE_ENV === "github";
 // pwa config
 // https://cli.vuejs.org/core-plugins/pwa.html#configuration
 module.exports = {  
-  publicPath : github? '/MILID': (prod? '/':'/'),
+  publicPath : github? '/CMS': (prod? '/':'/'),
   devServer: {
     proxy: {
       '^/editor': {
