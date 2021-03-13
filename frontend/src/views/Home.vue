@@ -183,13 +183,14 @@ export default class Home extends Vue {
       // time
       const content = {
         slug:this.slug,
-        content: data.block,
+        content: data.blocks,
         version: data.version,
         time: data.time,
-        published: this.published
+        published: this.published,
+        lang: 'fr'
       };
-      console.log("editorjs -- save 2",data)
-      const res = await $editor.create(data);
+      console.log("editorjs -- save 2",content)
+      const res = await $editor.create(content);
       console.log('--PHP create', res);
     }catch(err) {
       console.log('--PHP ERROR create', err);

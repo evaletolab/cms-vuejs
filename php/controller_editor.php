@@ -31,7 +31,6 @@
   function controller_editor_get($db,$slug,$query) {
     $published = $query["published"];
     $lang = $query["lang"];
-
     // echo "----pub :" . $published ;
     // echo "----slug:" . $slug;
     // content:
@@ -54,7 +53,7 @@
     $res = $statement->execute();
 
     if(!$res){
-        echo $sqlite->lastErrorMsg();
+        echo $db->lastErrorMsg();
         http_response_code(500);
         exit();
     }
@@ -67,7 +66,7 @@
     // free the memory, this in NOT done automatically, while your script is running
     $res->finalize();
     http_response_code(200);
-    echo json_encode($jsonArray[0]);
+    echo json_encode($jsonArray[0] ?? array());
   }
 
   //
@@ -78,7 +77,7 @@
     }
 
     $time = date("Y-m-d H:i:s");
-    $statement = $db->prepare("INSERT INTO editors (slug, content,version, published,lang, time) VALUES (:slug, :content,:version, :published,:lang, :timestamp)");
+    $statement = $db->prepare("INSERT INTO editors (slug, content,version, published,lang, time) VALUES (:slug, :content,:version, :published,:lang, :time)");
     if(!$statement){
         echo "statement failed\n";
         echo $statement;
@@ -94,7 +93,7 @@
     $res = $statement->execute();
 
     if(!$res){
-        echo $sqlite->lastErrorMsg();
+        echo $db->lastErrorMsg();
         http_response_code(500);
         exit();
     }
@@ -130,7 +129,7 @@
     $res = $statement->execute();
 
     if(!$res){
-        echo $sqlite->lastErrorMsg();
+        echo $db->lastErrorMsg();
         http_response_code(500);
         exit();
     }

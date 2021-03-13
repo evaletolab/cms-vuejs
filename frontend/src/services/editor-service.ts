@@ -39,12 +39,14 @@ class EditorService {
     //
     // save php
     const data = {
-      content: content.block,
+      slug: content.slug,
+      content: content.content,
       time: content.time,
       version: content.version,
       published: content.published,
+      lang: content.lang
     };
-    await axios.post("/editor/" + content.slug, data, defaultAxios);
+    await axios.post("/editor", data, defaultAxios);
 
     this.cms[content.slug] = content;
     console.log('---DBG localStorage',this.cms);
@@ -65,10 +67,11 @@ class EditorService {
     //
     // save php
     const data = {
-      content: content.block,
+      content: content.content,
       time: content.time,
       version: content.version,
       published: content.published,
+      lang: content.lang
     };
     await axios.post("/editor/" + content.slug, data, defaultAxios);
 
@@ -79,13 +82,17 @@ class EditorService {
     return content;
   }
 
-  async load(slug: string, published: boolean) {
+  async load(slug: string, published: boolean, lang?: string) {
     const user = await $user.get();
-
+    const config = Object.assign({},defaultAxios) as any;
+    config.params = {
+      published,
+      lang
+    };
 
     //
     // load Airtable usage
-    const res= await axios.get("/editor/" + slug + "?published=" + published, defaultAxios);
+    const res= await axios.get("/editor/" + slug, config);
     console.log('-- DBG',res);
     return res;
   }

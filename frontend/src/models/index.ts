@@ -31,11 +31,12 @@ export namespace CMS {
   }
 
   export interface Editor {
-    block: any[];
+    content: any;
     version: string;
     time: Date|number;
     published: boolean;
     slug: string;
+    lang: string;
   }
   
 }
