@@ -30,13 +30,25 @@ export namespace CMS {
     updated?: Date;
   }
 
+  export interface Page {
+    fr: any;
+    en: any;
+  }
+  export interface Table {
+    columns: string[];
+    rows: string[];
+  }
+
+  export type Content = Page | Table ;
+
   export interface Editor {
-    content: any;
+    id?:number;
+    title: string;
+    slug: string;
+    content: Content;
     version: string;
     time: Date|number;
     published: boolean;
-    slug: string;
-    lang: string;
   }
   
 }
