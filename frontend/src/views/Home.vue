@@ -210,6 +210,7 @@ export default class Home extends Vue {
       // time
       const data = await $editor.load(this.slug,this.published);
       this.slug = data.slug;
+      this.published = !!data.published;
       // FIXME load content 
       this.editor.data = data.content;
       console.log('--load', this.editor);
