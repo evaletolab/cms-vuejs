@@ -208,8 +208,13 @@ export default class Home extends Vue {
       // version
       // published
       // time
-      const content = await $editor.load(this.slug,this.published);
-      console.log('--PHP create', content);
+      const data = await $editor.load(this.slug,this.published);
+      this.slug = data.slug;
+      // FIXME load content 
+      this.editor.data = data.content;
+      console.log('--load', this.editor);
+
+
     }catch(err) {
       console.log('--PHP ERROR create', err);
     }

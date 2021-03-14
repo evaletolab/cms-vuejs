@@ -76,9 +76,11 @@ class EditorService {
 
     //
     // load Airtable usage
-    const res= await axios.get("/editor/" + slug, config);
-    console.log('-- DBG',res);
-    return res;
+    const data= (await axios.get("/editor/" + slug, config)).data;
+    if(data && data.content){
+      data.content = JSON.parse(data.content);
+    }
+    return data;
   }
 }
 
