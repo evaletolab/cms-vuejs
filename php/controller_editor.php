@@ -2,7 +2,6 @@
   //
   // naive security
   function controller_editor_security_post($token, $method) {
-
   }
 
   //
@@ -30,11 +29,11 @@
   // GET /editor/slug?published=true&lang=fr
   function controller_editor_get($db,$slug,$query) {
     $published = $query["published"];
-    $lang = $query["lang"];
     // echo "----pub :" . $published ;
     // echo "----slug:" . $slug;
     // content:
-    //    block: any[];
+    //    fr: any;
+    //    en: any;
     // version: string;
     // time: Date|number;
     // published: boolean;
@@ -77,7 +76,7 @@
     }
 
     $time = date("Y-m-d H:i:s");
-    $statement = $db->prepare("INSERT INTO editors (slug, content,version, published,lang, time) VALUES (:slug, :content,:version, :published,:lang, :time)");
+    $statement = $db->prepare("INSERT INTO editors (slug, content,version, published, time) VALUES (:slug, :content,:version, :published, :time)");
     if(!$statement){
         echo "statement failed\n";
         echo $statement;
@@ -86,7 +85,6 @@
     $statement->bindValue(':slug', $payload->slug);
     $statement->bindValue(':content', json_encode($payload->content));
     $statement->bindValue(':version', $payload->version);
-    $statement->bindValue(':lang', $payload->lang);
     $statement->bindValue(':published', $payload->published);
     $statement->bindValue(':time', $payload->time);
     
@@ -123,7 +121,6 @@
     $statement->bindValue(':content', json_encode($payload->content));
     $statement->bindValue(':version', $payload->version);
     $statement->bindValue(':published', $payload->published);
-    $statement->bindValue(':lang', $payload->lang);
     $statement->bindValue(':time', $payload->time);
     
     $res = $statement->execute();

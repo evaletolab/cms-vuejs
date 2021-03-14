@@ -50,6 +50,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Route } from 'vue-router';
+import { CMS } from "../models";
 import { $config, $editor } from '../services';
 
 import CMSIcons from '../components/CMSIcons.vue';
@@ -181,14 +182,17 @@ export default class Home extends Vue {
       // version
       // published
       // time
+      const page ={
+        fr:data.blocks,
+        en:[]
+      };
       const content = {
         slug:this.slug,
-        content: data.blocks,
+        content: page,
         version: data.version,
         time: data.time,
         published: this.published,
-        lang: 'fr'
-      };
+      } as CMS.Editor;
       console.log("editorjs -- save 2",content)
       const res = await $editor.create(content);
       console.log('--PHP create', res);
