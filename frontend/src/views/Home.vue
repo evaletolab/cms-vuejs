@@ -212,8 +212,9 @@ export default class Home extends Vue {
       this.slug = data.slug;
       this.published = !!data.published;
       // FIXME load content 
-      this.editor.data = data.content;
-      console.log('--load', this.editor);
+      //this.editor.configuration.data.blocks = data.content.fr;
+      this.editor.blocks.render({blocks:data.content.fr});
+      console.log('--load', this.editor.blocks);
 
 
     }catch(err) {
