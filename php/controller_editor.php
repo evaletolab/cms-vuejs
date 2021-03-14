@@ -28,7 +28,7 @@
   //
   // GET /editor/slug?published=true&lang=fr
   function controller_editor_get($db,$slug,$query) {
-    $published = $query["published"];
+    $published = $query["published"] == "true" ? 1:0;
     // echo "----pub :" . $published ;
     // echo "----slug:" . $slug;
     // content:
@@ -38,7 +38,7 @@
     // time: Date|number;
     // published: boolean;
     // slug: string;
-    $statement = $db->prepare("SELECT content,version,time,published FROM editors WHERE slug=:slug AND published=:published ORDER BY time DESC LIMIT 1;");
+    $statement = $db->prepare("SELECT * FROM editors WHERE slug=:slug AND published=:published ORDER BY time DESC LIMIT 1;");
     $statement->bindValue(":published", $published);
     $statement->bindValue(":slug",$slug);
 
@@ -58,6 +58,7 @@
     }
     $jsonArray = array();
     while($row = $res->fetchArray(SQLITE3_ASSOC)){ 
+      //json_decode($row->content)
       $jsonArray[] = $row;
     }
 
