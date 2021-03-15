@@ -24,12 +24,7 @@
       </div>        
     </nav>
 
-    <!-- USER -->
-    <div class="user">
-      <!-- <CMSIcons name="user" theme="1"/> -->
-      <h2>Olivier E.</h2>
-    </div>
-    <div>
+    <div class="document">
       <input type="text" placeholder="slug" v-model="slug" />
       <button @click="onCreate">create</button>
       <button @click="onLoad">load</button>
@@ -61,6 +56,17 @@ import List from '@editorjs/list';
 import Paragraph from '@editorjs/paragraph';
 import Table from '@editorjs/table';
 import SimpleImage from '@editorjs/simple-image'
+
+import CodeTool from '@editorjs/code'
+import Embed from '@editorjs/embed'
+import Checklist from '@editorjs/checklist'
+import Marker from '@editorjs/marker'
+import RawTool from '@editorjs/raw'
+
+// import Warning from '@editorjs/warning'
+// import Quote from '@editorjs/quote'
+// import InlineCode from '@editorjs/inline-code'
+// import Delimiter from '@editorjs/delimiter'
 
 @Component({
   components: {
@@ -108,6 +114,27 @@ export default class Home extends Vue {
               cols: 3,
             },
           },
+          code: {
+            class: CodeTool
+          },
+          embed: {
+            class: Embed,
+            config: {
+              services: {
+                youtube: true,
+                coub: true,
+                imgur: true
+              }
+            }
+          },
+          checklist: {
+            class: Checklist,
+          },
+          Marker: {
+            class: Marker,
+            shortcut: 'CMD+SHIFT+M',
+          },
+          raw: RawTool,
           image: SimpleImage,
         },
         onReady: function() {
@@ -132,7 +159,6 @@ export default class Home extends Vue {
   // --> https://github.com/ChangJoo-Park/vue-editor-js-imageserver/blob/master/index.js
   get editor(){
     const editor = this.$refs.editor as any;
-    console.log('--- get editor',editor);
     return editor._data.state.editor; 
   }
 
@@ -168,9 +194,7 @@ export default class Home extends Vue {
 
 
   async onInitialized(editor) {
-    //const editor = await $event;
-    console.log('---DBG init editor',editor.t)
-
+    //
   }
 
   async onCreate() {
@@ -195,7 +219,6 @@ export default class Home extends Vue {
       } as CMS.Editor;
       console.log("editorjs -- save 2",content)
       const res = await $editor.create(content);
-      console.log('--PHP create', res);
     }catch(err) {
       console.log('--PHP ERROR create', err);
     }

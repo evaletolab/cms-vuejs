@@ -35,9 +35,16 @@
       text-transform: uppercase;
     }
   }
+  .document{
+    border-radius: 5px;
+    background-color: #fff;
+
+    width: calc(100vw - 20px);
+    padding: 10px;
+  }
 
   .editor{
     background-color: #fff!important;
     padding: 15px;
-
+    text-align: left;
   }

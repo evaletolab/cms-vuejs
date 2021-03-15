@@ -231,7 +231,7 @@ export default class Landing extends Vue {
     const all = [$config.get(),$user.get()]
     Promise.all(all).then(([config, user])=> {
       if(user.id && user.name) {
-        return next('/module');
+        return next('/content');
       }
       next();
     })
@@ -240,7 +240,7 @@ export default class Landing extends Vue {
   onEnter(username){
     console.log('--- DBG entrer',username)
     $user.createUser(username)
-    this.$router.push({path:'/module' });
+    this.$router.push({path:'/content' });
   }
 
   onToggle(){

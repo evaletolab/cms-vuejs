@@ -17,7 +17,7 @@ const routes: Array<RouteConfig> = [
     component: Landing
   },
   {
-    path: '/module',
+    path: '/content',
     name: 'Modules',
     component: Home,
     beforeEnter: (to, from, next) =>{
