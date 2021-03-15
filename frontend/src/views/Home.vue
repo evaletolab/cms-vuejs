@@ -194,6 +194,11 @@ export default class Home extends Vue {
 
 
   async onInitialized(editor) {
+    if(this.$route.params.slug){
+      this.slug = this.$route.params.slug;
+      setTimeout(()=>this.onLoad(),500);
+    }
+
     //
   }
 

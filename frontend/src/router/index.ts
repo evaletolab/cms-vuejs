@@ -17,7 +17,7 @@ const routes: Array<RouteConfig> = [
     component: Landing
   },
   {
-    path: '/content',
+    path: '/content/:slug',
     name: 'Modules',
     component: Home,
     beforeEnter: (to, from, next) =>{
@@ -26,9 +26,9 @@ const routes: Array<RouteConfig> = [
       })
     },
     // children:[{
-    //   path: ':module_id/lesson/:lesson_id',
+    //   path: ':slug',
     //   name: 'Lesson',
-    //   components: { l2 : Lesson}  
+    //   components: { l2 : Home}  
     // }]
   },
   {
