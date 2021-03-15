@@ -96,6 +96,7 @@
         http_response_code(500);
         exit();
     }
+    $payload->id =  $db->lastInsertRowID();
     
     // free the memory, this in NOT done automatically, while your script is running
     $res->finalize();
@@ -112,7 +113,7 @@
     }
 
     $time = date("Y-m-d H:i:s");
-    $statement = $db->prepare("UPDATE EDITOR SET content=:content,version=:version,published=:published,time=:time WHERE slug = :slug AND lang = :lang");
+    $statement = $db->prepare("UPDATE editors SET content=:content,version=:version,published=:published,time=:time WHERE slug = :slug");
     if(!$statement){
         echo "statement failed\n";
         echo $statement;

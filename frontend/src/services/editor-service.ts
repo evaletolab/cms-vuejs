@@ -38,12 +38,12 @@ class EditorService {
 
     //
     // save php
-    await axios.post("/editor", content, defaultAxios);
+    const result = await axios.post("/editor", content, defaultAxios) as any;
+    content.id = result.id;
 
     this.cms[content.slug] = content;
     console.log('---DBG localStorage',this.cms);
     await $config.storageSet(this.STORAGE_KEY,content);
-
     return content;
   }
 
@@ -58,7 +58,7 @@ class EditorService {
 
     //
     // save php
-    await axios.post("/editor/" + content.slug, content, defaultAxios);
+    await axios.put("/editor/" + content.slug, content, defaultAxios);
 
     this.cms[content.slug] = content;
     console.log('---DBG localStorage',this.cms);

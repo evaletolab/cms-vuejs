@@ -25,12 +25,10 @@
     </nav>
 
     <div class="document">
-      <input type="text" placeholder="slug" v-model="slug" />
-      <button @click="onCreate">create</button>
-      <button @click="onLoad">load</button>
+      <button @click="onCreate" v-show="canCreate">create</button>
     </div>
 
-    <editor class="editor" ref="editor" :config="editorCfg" :initialized="onInitialized"/>    
+    <editor class="editor" ref="editor" :config="editorCfg" />    
 
     <!-- FULLSCREEN MODAL -->
     <router-view name="l2"/>
@@ -71,6 +69,7 @@ import RawTool from '@editorjs/raw'
 @Component({
   components: {
     Editor, 
+    Embed,
     Header,
     List,
     Paragraph,
@@ -84,7 +83,9 @@ export default class Home extends Vue {
 
   scrollDirection = 0;
   slug = "";
+  id = 0;
   published = false;
+  canCreate = false;
 
   get editorCfg() {
     return {
@@ -94,12 +95,8 @@ export default class Home extends Vue {
          */
         initialBlock: "paragraph",
         tools: {
-          header: {
-            class: Header
-          },
-          list: {
-            class: List
-          },
+          header: Header,
+          list: List,
           paragraph: {
             class: Paragraph,
             config: {
@@ -114,9 +111,7 @@ export default class Home extends Vue {
               cols: 3,
             },
           },
-          code: {
-            class: CodeTool
-          },
+          code: CodeTool,
           embed: {
             class: Embed,
             config: {
@@ -131,21 +126,25 @@ export default class Home extends Vue {
             class: Checklist,
           },
           Marker: {
-            class: Marker,
-            shortcut: 'CMD+SHIFT+M',
+            class: Marker
           },
           raw: RawTool,
           image: SimpleImage,
         },
-        onReady: function() {
+        onReady: () => {
           console.log("editorjs -- ready");
+          if(!this.slug){
+            return;
+          }
+          this.onLoad();
         },
-        onChange: function(elem) {
-          console.log("editorjs -- change",elem);
-
-          elem.saver.save().then((savedData) => {
-            console.log("editorjs -- save",savedData)
-            // this.value = savedData
+        onChange: (elem) => {
+          elem.saver.save().then(data => {
+            if(this.id) {
+              this.onSave();
+              return;
+            }
+            this.canCreate = true;
           });
         }
       };
@@ -172,6 +171,7 @@ export default class Home extends Vue {
   }
 
   mounted(){
+    this.slug = this.$route.params.slug;
     window.addEventListener("scroll", () => { 
       const st = window.pageYOffset || document.documentElement.scrollTop;
       //
@@ -193,25 +193,11 @@ export default class Home extends Vue {
   }
 
 
-  async onInitialized(editor) {
-    if(this.$route.params.slug){
-      this.slug = this.$route.params.slug;
-      // FIXME 
-      setTimeout(()=>this.onLoad(),1500);
-    }
-
-    //
-  }
 
   async onCreate() {
     try{
       const data = await this.editor.save();
       
-      // slug
-      // content
-      // version
-      // published
-      // time
       const page ={
         fr:data.blocks,
         en:[]
@@ -225,10 +211,12 @@ export default class Home extends Vue {
       } as CMS.Editor;
       console.log("editorjs -- save 2",content)
       const res = await $editor.create(content);
+      this.id = res.id;
     }catch(err) {
       console.log('--PHP ERROR create', err);
     }
   }
+
 
   async onLoad() {
     try{
@@ -238,6 +226,11 @@ export default class Home extends Vue {
       // published
       // time
       const data = await $editor.load(this.slug,this.published);
+      if(!data || !data.content) {
+        return;
+      }
+
+      this.id = data.id;
       this.slug = data.slug;
       this.published = !!data.published;
       // FIXME load content 
@@ -251,8 +244,26 @@ export default class Home extends Vue {
     }
   }
 
-  onSave() {
-    //
+  async onSave() {
+    try{
+      const data = await this.editor.save();
+      
+      const page ={
+        fr:data.blocks,
+        en:[]
+      };
+      const content = {
+        id: this.id,
+        slug:this.slug,
+        content: page,
+        version: data.version,
+        time: data.time,
+        published: this.published,
+      } as CMS.Editor;
+      const res = await $editor.save(content);
+    }catch(err) {
+      console.log('--PHP ERROR create', err);
+    }
   }
 }
 </script>

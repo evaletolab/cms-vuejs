@@ -7,6 +7,7 @@ import { $config, $user } from '@/services'
 
 import About from '../views/About.vue'
 import Home from '../views/Home.vue'
+import Content from '../views/Content.vue'
 
 Vue.use(VueRouter)
 
@@ -17,18 +18,18 @@ const routes: Array<RouteConfig> = [
     component: Landing
   },
   {
+    path: '/content',
+    name: 'Modules',
+    component: Home,
+  },
+  {
     path: '/content/:slug',
     name: 'Modules',
     component: Home,
-    beforeEnter: (to, from, next) =>{
-      $user.get().then(user => {
-        user.id ? next():next('/')
-      })
-    },
     // children:[{
     //   path: ':slug',
-    //   name: 'Lesson',
-    //   components: { l2 : Home}  
+    //   name: 'Content',
+    //   components: { l2 : Content}  
     // }]
   },
   {
