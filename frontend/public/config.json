@@ -15,5 +15,14 @@
   "airtable": {
     "key" : "--",
     "base" : "appdgQusWVGxQVipj"
+  },
+  "i18n":{
+    "fr":{
+      "landing_title1":"Bienvenue!"
+    },
+    "de":{
+      "landing_title1":"Bienvenue!"
+    }
   }
+
 }

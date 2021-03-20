@@ -67,6 +67,26 @@ class EditorService {
     return content;
   }
 
+  async get(published: boolean){
+    const user = await $user.get();
+    const config = Object.assign({},defaultAxios) as any;
+    config.params = {
+      published
+    };
+
+    //
+    // load Airtable usage
+    const data= (await axios.get("/editor", config)).data;
+    console.log('--DBG',data);
+    if(!data || !data.length){
+      return [];
+    }
+    return data.map(elem => {
+      elem.content = JSON.parse(elem.content);
+      return elem;
+    });
+  }
+
   async load(slug: string, published: boolean, lang?: string){
     const user = await $user.get();
     const config = Object.assign({},defaultAxios) as any;

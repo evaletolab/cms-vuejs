@@ -43,7 +43,9 @@ export namespace CMS {
 
   export interface Editor {
     id?:number;
-    title: string;
+    meta_title: string;
+    meta_type: string;
+    meta_tags: string;
     slug: string;
     content: Content;
     version: string;
